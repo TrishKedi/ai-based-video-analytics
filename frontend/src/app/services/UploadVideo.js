@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-const BASE_URL = 'http://127.0.0.1:8000/api'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const useUploadMutation = () => {
     
     return useMutation({
