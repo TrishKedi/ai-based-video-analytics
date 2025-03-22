@@ -4,16 +4,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useUploadMutation } from "../services/UploadVideo";
 import { useProcessMutation } from "../services/ProcessVideo";
-import { Button } from "@/components/ui/button"; // Updated import
-import { Progress } from "@/components/ui/progress"; // Updated import
-import dynamic from "next/dynamic";
+import { useTranscribeMutation } from "../services/Transcribe";
+import { Button } from "@/components/ui/button"; 
+import { Progress } from "@/components/ui/progress"; 
 
 const VideoUpload = () => {
     const [file, setFile] = useState("");
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState("");
+    const [transcript, setTranscript] = useState("");
     const uploadMutation = useUploadMutation();
     const processMutation = useProcessMutation();
+    const transcribeMutation = useTranscribeMutation();
 
     const handleFilechange = (event) => {
         setFile(event.target.files[0]);
@@ -29,16 +31,24 @@ const VideoUpload = () => {
         setProgress(10);
         try{
             const uploadResponse = await uploadMutation.mutateAsync(file);
-            setProgress(50);
+            setProgress(30);
             setMessage('Successfully uploaded file');
-            console.log(uploadResponse.file)
+            
             const processResponse = await processMutation.mutateAsync(uploadResponse.file)
             setMessage(`Processing complete! Audio: ${processResponse.audio_path}`);
+            setProgress(50);
+
+            setMessage("Generating Transcript ...");
+            setProgress(70);
+
+            const transcription = await transcribeMutation.mutateAsync(processResponse.audio_path);
+            
+            setTranscript(transcription.transcript);
             setProgress(100);
-            setMessage("successfully processed file");
+            setMessage("successfully transcribed video!");
         }
         catch(error){
-            console.log(error)
+            
             setMessage("An error occured, please try again later");
         }
     };
@@ -59,6 +69,12 @@ const VideoUpload = () => {
                     "Upload Video"
                 }
             </Button>
+            { transcript && (
+                <div>
+                    <h1>Trancript!</h1>
+                    <p>{transcript}</p>
+                </div>
+            )}
             { progress && (<Progress value={progress} className="mt-2"/>)}
             {message && (<p className="mt-2 text-sm text-green-400">{message}</p>)}
         </motion.div>

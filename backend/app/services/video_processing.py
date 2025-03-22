@@ -3,7 +3,6 @@ import subprocess
 from moviepy import VideoFileClip
 from pathlib import Path
 
-
 def extract_audio_from_video(video_path:str, output_dir: str = "audios"):
 
     if not os.path.exists(video_path):
@@ -21,5 +20,3 @@ def extract_audio_from_video(video_path:str, output_dir: str = "audios"):
     
     return audio_path
 
-# file_path = extract_audio_from_video('D:/AIProjects/ai-based-video-analytics/backend/uploads/Ollama-chatbot.mp4', 'audios')
-# print(file_path)

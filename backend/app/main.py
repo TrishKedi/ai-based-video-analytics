@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from  fastapi.middleware.cors import CORSMiddleware
 from app.routes.video import router as video_router
 from app.routes.transcribe import router as transcription_router
@@ -14,10 +14,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-
 app.include_router(video_router, prefix='/api', tags=['video'])
 app.include_router(transcription_router, prefix='/api', tags=['transcribe'])
 app.include_router(summary_router, prefix='/api', tags=['summarize'])
+
 
 @app.get('/')
 def  root():

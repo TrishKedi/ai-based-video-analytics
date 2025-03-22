@@ -24,13 +24,12 @@ def upload_video(file: UploadFile = File(...)):
     return { 'file': file.filename, 'file_path': file_path }
 
 @router.post("/process/")
-async def process_video(filename: str):
+def process_video(filename: str):
     """
     Endpoint to extract audio from a video file.
     """
     video_path = os.path.join(UPLOAD_DIR, filename)
-    print(f"The video path  is: {video_path}")
-
+    
     if not os.path.exists(video_path):
         raise HTTPException(status_code=404, detail="Video file not found")
     
