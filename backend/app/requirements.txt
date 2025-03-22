@@ -3,7 +3,7 @@ uvicorn==0.27.1
 pydantic==2.6.4
 pydantic-settings==2.2.1
 python-multipart==0.0.9
-moviepy==1.0.3
+moviepy==2.1.1
 openai-whisper==20231117
 transformers==4.39.1
 torch==2.2.1
